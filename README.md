@@ -1,12 +1,15 @@
 # plotlyjs
 R wrapper for plotly JS
 
-Intended use:
+# Intended use:
+> figure(c(1:5)) is the fastest way to visualize data
+...this creates a tmp.html file in the current working directory that can be opened in a web browser
+
 1) Clear previous report contents
       > plotlyIni()
 
 2) Create graphs in a for loop using addGraph()
-  for (ii in 1:ngraphs)\{
+  for (ii in 1:ngraphs){
       addGraph(list(periods,values), -> time series #1
                list(periods,values), -> ts #2
                ...,                  -> other ts
@@ -15,7 +18,7 @@ Intended use:
                vline=c('2010-01-01','2013-01-01',...),
                xlabel="...",ylabel="...",
                colors=c(rgba(100,100,100,0.9),...))
-  \}
+  }
   !!! All arguments, except for input time series, are optional 
 
 3) Generate the report file
