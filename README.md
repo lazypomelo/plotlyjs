@@ -2,6 +2,21 @@
 R wrapper for plotly JS
 
 # Intended use:
+
+```javascript
+function fancyAlert(arg) {
+  if(arg) {
+    $.facebox({div:'#foo'})
+  }
+}
+```
+```R
+fancyAlert <- function(arg) {
+  if(arg) {
+    return(T)
+  }
+}
+```
 > figure(c(1:5)) is the fastest way to visualize data
 ...this creates a tmp.html file in the current working directory that can be opened in a web browser
 
