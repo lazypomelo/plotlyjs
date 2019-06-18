@@ -1,7 +1,7 @@
 # plotlyjs
 R wrapper for plotly JS
 
-# Intended use:
+## Intended use:
 
 ```javascript
 function fancyAlert(arg) {
@@ -14,6 +14,11 @@ function fancyAlert(arg) {
 fancyAlert <- function(arg) {
   if(arg) {
     return(T)
+  }
+}
+function fancyAlert(arg) {
+  if(arg) {
+    $.facebox({div:'#foo'})
   }
 }
 ```
