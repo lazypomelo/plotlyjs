@@ -2,12 +2,12 @@
 R wrapper for javascript version of [plotly](https://plot.ly/javascript/) graphing library. Suitable for fast generation of reports that contain many graphs (even hundreds). 
 
 Only basic graph types are handled:
-- Line graphs,
 - Time series graphs,
+- Line graphs,
 - Bar graphs,
-- Bubble graphs
+- Bubble graphs.
 
-Reports are stored in a self-contained HTML file that needs to be opened externally in a browser.
+Generated reports are stored in a self-contained HTML file that needs to be opened externally in a browser.
 
 ## Installation
 ```js
@@ -42,7 +42,8 @@ In most cases here we would like to create many graphs, perhaps inside a *for* l
 > dt <- data.frame(replicate(5,runif(8))) # Create a random dataframe
 > for (ii in 1:ncol(dt)){
       addGraph(list(periods,dt[,ii]),
-	       title=colnames(dt)[ii]) #
+	       title=colnames(dt)[ii]
+      )
   }
 ```
 3) As a last step generate the HTML report:
@@ -65,16 +66,23 @@ addGraph(list(periods,values), -> time series
 }
   ```
 **Notes:**
-*vline* - Set of vertical lines (useful for time series graphs to separate history from the forecasting range)  
-*colors* - set of RGB/RGBA color codes for each of the input data series
+- *vline* - Set of vertical lines (useful for time series graphs to separate history from the forecasting range)  
+- *colors* - set of RGB/RGBA color codes for each of the input data series
 
 ```js
 > plotlyCompile(reportFile="path/to/your/file.html",
                 lightWeight=F)
 ```
  **Notes:**
-*lightWeight*=T ...plotly library downloaded from CDN (slower to re-run results but easy to share the report file since it is small in size)
-*lightWeight=F ...local copy of Plotly library embedded into the report (faster to generate/load in browser, but the reports larger in size)
+- *lightWeight*=T ...plotly library downloaded from CDN (slower to re-run results but easy to share the report file since it is small in size)
+- *lightWeight*=F ...local copy of Plotly library embedded into the report (faster to generate/re-load in a browser, but the report is quite large in size)
 
-## Example
+## Other graph types
+Here we describe the syntax for graph types other than time series. *addGraph()* function can still be used together with *type* option.
+
+### Line graph
+
+### Bar graph
+
+### Bubble graph
 
