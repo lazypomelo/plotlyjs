@@ -96,8 +96,7 @@ Type option should be set to "bar". The rest of options stays the same as for li
 ```js
 data <- runif(4)
 addGraph(data,          # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
-         type="bar",
-	 x = c(1,2,3,4) # values on horizontal axis are optional
+         type="bar"
 )
 ```
   
