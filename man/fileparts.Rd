@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotlyGraphs.R
 \name{fileparts}
 \alias{fileparts}
-\title{#' Folder, file and extension parts of a file name.}
+\title{Folder, file and extension parts of a file name.}
 \usage{
 fileparts(filepath)
 }
@@ -13,7 +13,7 @@ fileparts(filepath)
 list of file parts.
 }
 \description{
-#' Folder, file and extension parts of a file name.
+Folder, file and extension parts of a file name.
 }
 \examples{
 fileparts("filePath")

@@ -5,7 +5,7 @@
 \title{Compilation of HTML/plotly document}
 \usage{
 plotlyCompile(reportFile = "tmp.html",
-  libFile = "model_exploration/plotly-v1.47.3.min.js", lightWeight = F)
+  libFile = "path/to/file/plotly.min.js", lightWeight = F)
 }
 \arguments{
 \item{all}{optional.}

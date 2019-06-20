@@ -4,8 +4,8 @@
 \alias{addGraph}
 \title{Generates HTML/plotly code for a new graph}
 \usage{
-addGraph(..., x = c(), type = "line", title = "", vline = c(),
-  legend = c(), xlabel = "", ylabel = "", colors = c(), size = 6,
+addGraph(..., x = c(), type = c(), title = "", vline = c(),
+  legend = c(), xlabel = "", ylabel = "", colors = c(), by = "",
   lineWidth = 2)
 }
 \value{
