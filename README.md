@@ -62,8 +62,8 @@ addGraph(list(periods,values), -> time series
          legend=c("lg entry 1","lg entry 2",...),
          vline=c('2010-01-01','2013-01-01',...),
          xlabel="...",ylabel="...",
-         colors=c(rgba(100,100,100,0.9),...))
-}
+         colors=c(rgba(100,100,100,0.9),...)
+)
   ```
 **Notes:**
 - *vline* - Set of vertical lines (useful for time series graphs to separate history from the forecasting range)  
@@ -81,8 +81,40 @@ addGraph(list(periods,values), -> time series
 Here we describe the syntax for graph types other than time series. *addGraph()* function can still be used together with *type* option.
 
 ### Line graph
-
+The syntax for line graphs is identical as for the time series graphs. 
+Values on horizontal axis are optional. Type option should be set to "line"
+```js
+data <- runif(4)
+addGraph(data,          # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
+         type="line",
+	 x = c(1,2,3,4) # values on horizontal axis are optional
+)
+```
 ### Bar graph
-
+Input data must be inside a data frame.
+Type option should be set to "bar". The rest of options stays the same as for line/ts graphs.
+```js
+data <- runif(4)
+addGraph(data,          # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
+         type="bar",
+	 x = c(1,2,3,4) # values on horizontal axis are optional
+)
+```
+  
 ### Bubble graph
+Input data must be inside a data frame. 
+Type option should be set to "bubble". "by" option is not mandatory, but helps to visualize different data sets in different colors.
+If 3 data columns are used, the 3rd (optional) column will be used for bubble sizes.
+```js
+data <- data.frame(
+		x=runif(100),
+		y=runif(100),
+		siz=runif(100), # Bubble sizes here [optional column]
+		groups=c(rep('Group1',40),rep('Group2',60))
+)
+addGraph(data,
+	 type="bubble",
+	 by="groups"
 
+)
+```
