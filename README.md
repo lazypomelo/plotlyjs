@@ -33,10 +33,12 @@ Each use of *figure()* function always overrides the previous graph + refresh of
 
 2) Generate a graph using *addGraph()* - here, in this example, we create a time series graph for which we need the time axis info together with the values:
 ```js
-> periods <- 
+> periods <- seq(as.Date('2010-01-01'),as.Date('2010-08-01'),by="month")
 > values <- runif(8, min=0, max=10) # Random values
 > addGraph(list(periods,values))
 ```
+> Input format can be list(periods,values), time series, numeric, matrix, or data frame.
+
 In most cases here we would like to create many graphs, perhaps inside a *for* loop to visualize, say, each column of a dataframe:
 ```js
 > dt <- data.frame(replicate(5,runif(8))) # Create a random dataframe
