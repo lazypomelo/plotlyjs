@@ -97,7 +97,7 @@ Input data must be inside a data frame.
 Type option should be set to "bar". The rest of options stays the same as for line/ts graphs.
 ```js
 data <- runif(4)
-addGraph(data,          # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
+addGraph(data,
          type="bar"
 )
 ```
