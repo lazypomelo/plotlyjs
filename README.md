@@ -72,7 +72,7 @@ Leaving the function options blank results in generation of a **tmp.html** file 
 Both graph creation and report compilation functions have optional arguments.
 ``` r
 addGraph(data1, data2, data3, ...
-	 type="ts|line|bar|bubble" -> 1 type to be selected here
+	 type="ts|line|bar|bubble",
          title="myTitle",
          legend=c("lg entry 1","lg entry 2",...),
          vline=c('2010-01-01','2013-01-01',...),
