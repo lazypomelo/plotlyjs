@@ -10,13 +10,13 @@ Only basic graph types are handled:
 Generated reports are stored in a self-contained HTML file that needs to be opened externally in a browser.
 
 ## Installation
-```js
+``` r
 devtools::install_github("lazypomelo/plotlyjs")
 library(plotlyjs)
 ```
 ## Fast data visualization
 The easiest way to visualize data is to use *figure()* function:
-```js
+``` r
 data <- c(1:5)
 figure(data)
 ```
@@ -27,12 +27,12 @@ Each use of *figure()* function always overrides the previous graph + refresh of
 ## Intended workflow
 
 1) Initialize/Clear previous report contents
-```js
+``` r
 > plotlyIni()
 ```
 
 2) Generate a graph using *addGraph()* - here, in this example, we create a time series graph for which we need the time axis info together with the values:
-```js
+``` r
 > periods <- seq(as.Date('2010-01-01'),as.Date('2010-08-01'),by="month")
 > values <- runif(8, min=0, max=10) # Random values
 > addGraph(list(periods,values), type="ts")
@@ -40,7 +40,7 @@ Each use of *figure()* function always overrides the previous graph + refresh of
 > !!! Expected input format: list(periods,values), time series object, numeric vector, matrix, or data frame.
 
 In most cases here we would like to create many graphs, perhaps inside a *for* loop to visualize, say, each column of a dataframe:
-```js
+``` r
 > dt <- data.frame(replicate(5,runif(8))) # Create a random dataframe
 > for (ii in 1:ncol(dt)){
       addGraph(list(periods,dt[,ii]),
@@ -50,7 +50,7 @@ In most cases here we would like to create many graphs, perhaps inside a *for* l
   }
 ```
 Multiple lines in one plot (e.g. model comparison):
-```js
+``` r
 > dt1 <- data.frame(replicate(5,runif(8)))
 > dt2 <- data.frame(replicate(5,runif(8)))
 > for (ii in 1:ncol(dt1)){
@@ -63,14 +63,14 @@ Multiple lines in one plot (e.g. model comparison):
   }
 ```
 3) As a last step generate the HTML report:
-```js
+``` r
 > plotlyCompile()
 ```
 Leaving the function options blank results in generation of a **tmp.html** file located in the the current working directory (just like the result of **figure()** command).
 
 ## Optional function arguments
 Both graph creation and report compilation functions have optional arguments.
-```js
+``` r
 addGraph(data1, data2, data3, ...
 	 type="ts|line|bar|bubble" -> 1 type to be selected here
          title="myTitle",
@@ -84,7 +84,7 @@ addGraph(data1, data2, data3, ...
 - *vline* - Set of vertical lines (useful for time series graphs to separate history from the forecasting range)  
 - *colors* - set of RGB/RGBA color codes for each of the input data series
 
-```js
+``` r
 > plotlyCompile(reportFile="path/to/your/file.html",
 		libFile="path/to/file/plotly.min.js",
                 lightWeight=F)
@@ -101,7 +101,7 @@ Here we describe the syntax for graph types other than time series. *addGraph()*
 ### Line graph
 The syntax for line graphs is identical as for the time series graphs. 
 Values on horizontal axis are optional. The type option should be set to "line"
-```js
+``` r
 data <- matrix(runif(15),5,3))
 addGraph(data,        # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
          type="line",
@@ -111,7 +111,7 @@ addGraph(data,        # 1 or more list(x,y), or a numeric vector/matrix, or a da
 ### Bar graph
 Input data must be inside a data frame.
 Type option should be set to "bar". The rest of options stays the same as for line/ts graphs.
-```js
+``` r
 data <- matrix(runif(15),5,3))
 addGraph(as.data.frame(data),
          type="bar"
@@ -122,7 +122,7 @@ addGraph(as.data.frame(data),
 Input data must be inside a data frame. 
 Type option should be set to "bubble". "by" option is not mandatory, but helps to visualize different data sets in different colors.
 If 3 data columns are used, the 3rd (optional) column will be used for bubble sizes.
-```js
+``` r
 data <- data.frame(
 		x=runif(100),
 		y=runif(100),
