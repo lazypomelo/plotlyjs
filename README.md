@@ -35,16 +35,30 @@ Each use of *figure()* function always overrides the previous graph + refresh of
 ```js
 > periods <- seq(as.Date('2010-01-01'),as.Date('2010-08-01'),by="month")
 > values <- runif(8, min=0, max=10) # Random values
-> addGraph(list(periods,values))
+> addGraph(list(periods,values), type="ts")
 ```
-> Input format can be list(periods,values), time series, numeric, matrix, or data frame.
+> !!! Expected input format: list(periods,values), time series object, numeric vector, matrix, or data frame.
 
 In most cases here we would like to create many graphs, perhaps inside a *for* loop to visualize, say, each column of a dataframe:
 ```js
 > dt <- data.frame(replicate(5,runif(8))) # Create a random dataframe
 > for (ii in 1:ncol(dt)){
       addGraph(list(periods,dt[,ii]),
-	       title=colnames(dt)[ii]
+	       title=colnames(dt)[ii],
+	       type="ts"
+      )
+  }
+```
+Multiple lines in one plot (e.g. model comparison):
+```js
+> dt1 <- data.frame(replicate(5,runif(8)))
+> dt2 <- data.frame(replicate(5,runif(8)))
+> for (ii in 1:ncol(dt1)){
+      addGraph(list(periods,dt1[,ii]),
+      	       list(periods,dt2[,ii]),
+	       title = colnames(dt1)[ii],
+	       legend = c("Model 1", "Model 2"),
+	       type="ts"
       )
   }
 ```
@@ -57,9 +71,8 @@ Leaving the function options blank results in generation of a **tmp.html** file 
 ## Optional function arguments
 Both graph creation and report compilation functions have optional arguments.
 ```js
-addGraph(list(periods,values), -> time series
-	 list(periods,values), -> ts #2
-         ...,                  -> other ts
+addGraph(data1, data2, data3, ...
+	 type="ts|line|bar|bubble" -> 1 type to be selected here
          title="myTitle",
          legend=c("lg entry 1","lg entry 2",...),
          vline=c('2010-01-01','2013-01-01',...),
@@ -84,20 +97,20 @@ Here we describe the syntax for graph types other than time series. *addGraph()*
 
 ### Line graph
 The syntax for line graphs is identical as for the time series graphs. 
-Values on horizontal axis are optional. Type option should be set to "line"
+Values on horizontal axis are optional. The type option should be set to "line"
 ```js
-data <- runif(4)
-addGraph(data,          # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
+data <- matrix(runif(15),5,3))
+addGraph(data,        # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
          type="line",
-	 x = c(1,2,3,4) # values on horizontal axis are optional
+	 x = c(1:5)   # values on horizontal axis are optional
 )
 ```
 ### Bar graph
 Input data must be inside a data frame.
 Type option should be set to "bar". The rest of options stays the same as for line/ts graphs.
 ```js
-data <- runif(4)
-addGraph(data,
+data <- matrix(runif(15),5,3))
+addGraph(as.data.frame(data),
          type="bar"
 )
 ```
@@ -116,6 +129,5 @@ data <- data.frame(
 addGraph(data,
 	 type="bubble",
 	 by="group"
-
 )
 ```
