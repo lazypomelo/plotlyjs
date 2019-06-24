@@ -35,7 +35,7 @@ Each use of *figure()* function always overrides the previous graph + refresh of
 ```js
 > periods <- seq(as.Date('2010-01-01'),as.Date('2010-08-01'),by="month")
 > values <- runif(8, min=0, max=10) # Random values
-> addGraph(list(periods,values))
+> addGraph(list(periods,values), type="ts")
 ```
 > !!! Expected input format: list(periods,values), time series object, numeric vector, matrix, or data frame.
 
@@ -44,7 +44,8 @@ In most cases here we would like to create many graphs, perhaps inside a *for* l
 > dt <- data.frame(replicate(5,runif(8))) # Create a random dataframe
 > for (ii in 1:ncol(dt)){
       addGraph(list(periods,dt[,ii]),
-	       title=colnames(dt)[ii]
+	       title=colnames(dt)[ii],
+	       type="ts"
       )
   }
 ```
@@ -56,7 +57,8 @@ Multiple lines in one plot (e.g. model comparison):
       addGraph(list(periods,dt1[,ii]),
       	       list(periods,dt2[,ii]),
 	       title = colnames(dt1)[ii],
-	       legend = c("Model 1", "Model 2")
+	       legend = c("Model 1", "Model 2"),
+	       type="ts"
       )
   }
 ```
@@ -69,9 +71,8 @@ Leaving the function options blank results in generation of a **tmp.html** file 
 ## Optional function arguments
 Both graph creation and report compilation functions have optional arguments.
 ```js
-addGraph(list(periods,values), -> time series
-	 list(periods,values), -> ts #2
-         ...,                  -> other ts
+addGraph(data1, data2, data3, ...
+	 type="ts|line|bar|bubble" -> 1 type to be selected here
          title="myTitle",
          legend=c("lg entry 1","lg entry 2",...),
          vline=c('2010-01-01','2013-01-01',...),
