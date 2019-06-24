@@ -111,11 +111,11 @@ data <- data.frame(
 		x=runif(100),
 		y=runif(100),
 		siz=runif(100), # Bubble sizes here [optional column]
-		groups=c(rep('Group1',40),rep('Group2',60))
+		group=c(rep('Group 1',40),rep('Group 2',60))
 )
 addGraph(data,
 	 type="bubble",
-	 by="groups"
+	 by="group"
 
 )
 ```
