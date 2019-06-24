@@ -37,7 +37,7 @@ Each use of *figure()* function always overrides the previous graph + refresh of
 > values <- runif(8, min=0, max=10) # Random values
 > addGraph(list(periods,values))
 ```
-> Input format can be list(periods,values), time series, numeric, matrix, or data frame.
+> !!! Expected input format: list(periods,values), time series object, numeric vector, matrix, or data frame.
 
 In most cases here we would like to create many graphs, perhaps inside a *for* loop to visualize, say, each column of a dataframe:
 ```js
@@ -45,6 +45,18 @@ In most cases here we would like to create many graphs, perhaps inside a *for* l
 > for (ii in 1:ncol(dt)){
       addGraph(list(periods,dt[,ii]),
 	       title=colnames(dt)[ii]
+      )
+  }
+```
+Multiple lines in one plot (e.g. model comparison):
+```js
+> dt1 <- data.frame(replicate(5,runif(8)))
+> dt2 <- data.frame(replicate(5,runif(8)))
+> for (ii in 1:ncol(dt1)){
+      addGraph(list(periods,dt1[,ii]),
+      	       list(periods,dt2[,ii]),
+	       title = colnames(dt1)[ii],
+	       legend = c("Model 1", "Model 2")
       )
   }
 ```
@@ -116,6 +128,5 @@ data <- data.frame(
 addGraph(data,
 	 type="bubble",
 	 by="group"
-
 )
 ```
