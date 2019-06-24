@@ -86,11 +86,14 @@ addGraph(data1, data2, data3, ...
 
 ```js
 > plotlyCompile(reportFile="path/to/your/file.html",
+		libFile="path/to/file/plotly.min.js",
                 lightWeight=F)
 ```
  **Notes:**
+- All arguments are optional
 - *lightWeight*=T ...plotly library downloaded from CDN (slower to re-run results but easy to share the report file since it is small in size)
 - *lightWeight*=F ...local copy of Plotly library embedded into the report (faster to generate/re-load in a browser, but the report is quite large in size)
+- *libFile* ...path to local copy of plotly JS library file 
 
 ## Other graph types
 Here we describe the syntax for graph types other than time series. *addGraph()* function can still be used together with *type* option.
