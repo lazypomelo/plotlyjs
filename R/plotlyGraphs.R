@@ -231,9 +231,10 @@ graphTypeTS <- function(grObj,grInfo,igr,
 
     } else if (nobjs==1 & class(objs[[1]])[1]!="list") { # Non-list input treatment
 
-        # Input can be numeric, matrix, data frame
+        # Input can be numeric, matrix, data frame, ts
         if (is.ts(objs[[1]])){
             periods <- zoo::as.Date(time(objs[[1]]))
+            objs[[1]] <- as.matrix(objs[[1]]) # because univariate ts not in matrix format
 
         }else if (is.numeric(objs[[1]])){
             objs[[1]] <- as.matrix(objs[[1]])
@@ -252,7 +253,7 @@ graphTypeTS <- function(grObj,grInfo,igr,
 
         obj <- objs[[1]]
         nobjs <- ncol(obj)
-        objs <- vector("list",ncol(obj))
+        objs <- vector("list",nobjs)
         if (length(x)>0 & !is.ts(obj)){
           periods <- x
         }
