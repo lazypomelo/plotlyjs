@@ -22,7 +22,7 @@ figure(data)
 ```
 The result is the **tmp.html** file located in the the current working directory (path to be checked by R *getwd()* function):
 
-Each use of *figure()* function always overrides the previous graph + refresh of the web browser needed.
+Each use of *figure()* function always overrides the previous graph + a refresh of the web browser needed.
  
 ## Intended workflow
 
