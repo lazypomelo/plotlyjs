@@ -11,7 +11,7 @@ Generated reports are stored in a self-contained HTML file that needs to be open
 
 ## Installation
 ```js
-devtools::install_github(lazypomelo/plotlyjs)
+devtools::install_github("lazypomelo/plotlyjs")
 library(plotlyjs)
 ```
 ## Fast data visualization
