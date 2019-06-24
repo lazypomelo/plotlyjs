@@ -84,20 +84,20 @@ Here we describe the syntax for graph types other than time series. *addGraph()*
 
 ### Line graph
 The syntax for line graphs is identical as for the time series graphs. 
-Values on horizontal axis are optional. Type option should be set to "line"
+Values on horizontal axis are optional. The type option should be set to "line"
 ```js
-data <- runif(4)
-addGraph(data,          # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
+data <- matrix(runif(15),5,3))
+addGraph(data,        # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
          type="line",
-	 x = c(1,2,3,4) # values on horizontal axis are optional
+	 x = c(1:5)   # values on horizontal axis are optional
 )
 ```
 ### Bar graph
 Input data must be inside a data frame.
 Type option should be set to "bar". The rest of options stays the same as for line/ts graphs.
 ```js
-data <- runif(4)
-addGraph(data,
+data <- matrix(runif(15),5,3))
+addGraph(as.data.frame(data),
          type="bar"
 )
 ```
