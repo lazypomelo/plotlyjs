@@ -66,7 +66,8 @@ Multiple lines from a data frame (separate *x* axis definition mandatory for tim
 ``` r
 > dt <- data.frame(replicate(5,runif(8)))
 > addGraph(dt, 
-           x = seq(as.Date('2010-01-01'),as.Date('2010-08-01'),by="month") # or any other sequence of values for other graph types
+           x = seq(as.Date('2010-01-01'), as.Date('2010-08-01'), by="month") 
+               # or any other sequence of values (even string categories) for other graph types
   )
 ```
 3) As a last step generate the HTML report:
