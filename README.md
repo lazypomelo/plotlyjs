@@ -114,7 +114,7 @@ Values on horizontal axis are optional. The type option should be set to "line"
 data <- matrix(runif(15),5,3))
 addGraph(data,        # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
          type="line",
-	 x = c(1:5)   # values on horizontal axis are optional
+	 x = c(1:5)   # x axis values; exclude this line for default values
 )
 ```
 ### Bar graph
