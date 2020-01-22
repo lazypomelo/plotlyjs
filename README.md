@@ -49,7 +49,7 @@ In most cases here we would like to create many graphs, perhaps inside a *for* l
       )
   }
 ```
-Multiple lines in one plot (e.g. model comparison):
+Multiple lines in one plot (series by series syntax):
 ``` r
 > dt1 <- data.frame(replicate(5,runif(8)))
 > dt2 <- data.frame(replicate(5,runif(8)))
@@ -61,6 +61,15 @@ Multiple lines in one plot (e.g. model comparison):
 	       type="ts"
       )
   }
+```
+Multiple lines in one plot (all columns from a data frame)
+ - separate *x* axis definition mandatory for time series:
+``` r
+> dt <- data.frame(replicate(5,runif(8)))
+> addGraph(dt, 
+           x = seq(as.Date('2010-01-01'), as.Date('2010-08-01'), by="month") 
+               # or any other sequence of values (even string categories) for other graph types
+  )
 ```
 3) As a last step generate the HTML report:
 ``` r
@@ -105,7 +114,7 @@ Values on horizontal axis are optional. The type option should be set to "line"
 data <- matrix(runif(15),5,3))
 addGraph(data,        # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
          type="line",
-	 x = c(1:5)   # values on horizontal axis are optional
+	 x = c(1:5)   # x axis values; exclude this line for default values
 )
 ```
 ### Bar graph
