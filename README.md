@@ -15,14 +15,19 @@ devtools::install_github("lazypomelo/plotlyjs")
 library(plotlyjs)
 ```
 ## Fast data visualization
-The easiest way to visualize data is to use *figure()* function:
+The easiest way to visualize data, similar to standard *plot()*, is to use *figure()* function:
 ``` r
 data <- c(1:5)
 figure(data)
 ```
-The result is the **tmp.html** file located in the the current working directory (path to be checked by R *getwd()* function):
-
-Each use of *figure()* function always overrides the previous graph + a refresh of the web browser needed.
+The result is stored in **tmp.html** file located in the the current working directory (path to be checked in R with *getwd()* function).
+Optionally, the user can specify another report name, or ask RStudio to open up the report file in browser:
+``` r
+data <- c(1:5)
+figure(data, reportFile = "path/to/file.html",
+	     reopen = T)
+```
+Each use of *figure()* function always overrides the previous graph. A refresh of the web browser is needed after each update.
  
 ## Intended workflow
 
