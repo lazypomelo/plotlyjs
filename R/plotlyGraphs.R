@@ -1109,7 +1109,8 @@ graphTypeBubble <- function(grObj,grInfo,igr,
 #' plotlyCompile()
 plotlyCompile <- function(reportFile="tmp.html",
                           libFile="path/to/file/plotly.min.js",
-                          lightWeight = F){
+                          lightWeight = F,
+                          reopen = F){
 
   # Fetch graph container
   if (!exists('plotly_obj_graphs', envir = .GlobalEnv)) {
@@ -1197,15 +1198,15 @@ plotlyCompile <- function(reportFile="tmp.html",
   }
 
   # Open up the report in a web browser only if not yet opened
-  openReport(reportFile)
-  print("asdf")
+  openReport(reportFile, reopen)
+  
 }
 
 #' Automatic report opening
 #'
 #' @param none
 #' @return none
-openReport <- function(reportFile){
+openReport <- function(reportFile, reopen){
 
   # Open up the report in browser only if not done previously
   if (!any("plotly_obj_viewer"==ls(envir = .GlobalEnv))){
@@ -1223,7 +1224,7 @@ openReport <- function(reportFile){
      reports  <- get('plotly_obj_viewer', envir = .GlobalEnv)
 
      # Current report not yet opened
-     if (!any(reportFile==reports)){
+     if (reopen==T || !any(reportFile==reports)){
 
          # Not everyone uses Rstudio
          if (Sys.getenv("RSTUDIO")=="1"){
@@ -1244,11 +1245,12 @@ openReport <- function(reportFile){
 #' @export
 #' @examples
 #' figure(c(1:5))
-figure <- function(d) {
+figure <- function(d, reportName = "tmp.html",
+                      reopen = F) {
 
   plotlyIni()
   addGraph(d)
-  tmpReport <- "tmp.html"
-  plotlyCompile(reportFile=tmpReport)
+  plotlyCompile(reportFile=reportName, 
+                reopen=reopen)
 
 }
