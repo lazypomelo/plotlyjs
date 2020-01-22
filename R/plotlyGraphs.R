@@ -1198,7 +1198,7 @@ plotlyCompile <- function(reportFile="tmp.html",
 
   # Open up the report in a web browser only if not yet opened
   openReport(reportFile)
-
+  print("asdf")
 }
 
 #' Automatic report opening
