@@ -1245,12 +1245,12 @@ openReport <- function(reportFile, reopen){
 #' @export
 #' @examples
 #' figure(c(1:5))
-figure <- function(d, reportName = "tmp.html",
+figure <- function(d, reportFile = "tmp.html",
                       reopen = F) {
 
   plotlyIni()
   addGraph(d)
-  plotlyCompile(reportFile=reportName, 
+  plotlyCompile(reportFile=reportFile, 
                 reopen=reopen)
 
 }
