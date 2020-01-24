@@ -1370,7 +1370,7 @@ push2github <- function(repoClone){
   system('git push')
   
   # Re-install from github
-  if ("plotlyjs" %in% rownames(installed.packages())) {
+  if ("plotlyjs" %in% list.files(.libPaths()[1])) {
     remove.packages("plotlyjs")
   }
   devtools::install_github("lazypomelo/plotlyjs")
