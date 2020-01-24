@@ -1268,7 +1268,10 @@ download2fix <- function(
   localFile <- paste0(localPlayground,"/plotlyGraphs.R")
   
   # Update local repo
-  system(paste0(repoClone," git pull"))
+  path_was <- getwd()
+  setwd(repoClone)
+  system("git pull")
+  setwd(path_was)
   
   # Copy fresh code version into playground
   file.copy(from = repoFile, 
@@ -1286,9 +1289,6 @@ download2fix <- function(
   print(paste0("!!! [1] Resourcing: source('",localFile,"')"))
   print("!!! [0] Start e.g. with View(figure) to set browser()")
   print("!!! [1] use uploadFixed() when done...")
-  print("!!! [2] change manually DESCRIPTION for dependencies...")
-  print("!!! [3] Open .Rproj in repo and run Roxygen2::document()")
-  print("        -> this is needed for export/import in NAMESPACE")
 
 }
 
@@ -1315,7 +1315,10 @@ uploadFixed <- function(
     print("--> DONE... Now pushing to github")
     
     # Push results to github
+    path_was <- getwd()
+    setwd(repoClone)
     push2github(repoClone)
+    setwd(path_was)
     
   }else if(resp=='y'){
     
@@ -1339,13 +1342,12 @@ uploadFixed <- function(
         path_was <- getwd()
         setwd(repoClone)
         devtools::document()
-        
-        setwd(path_was)
-        
         print("--> DONE... Now pushing to github")
         
         # Push results to github
         push2github(repoClone)
+        
+        setwd(path_was)
         
       }else{
         print("...Quitting function, 'y' wanted as answer, try again.")
@@ -1364,8 +1366,8 @@ uploadFixed <- function(
 #' @param none
 #' @return none
 push2github <- function(repoClone){
-  system(paste0(repoClone,' git commit -a -m "Autopush after a fix"'))
-  system(paste0(repoClone,' git push'))
+  system('git commit -a -m "Autopush after a fix"')
+  system('git push')
   
   # Re-install from github
   if ("plotlyjs" %in% rownames(installed.packages())) {
