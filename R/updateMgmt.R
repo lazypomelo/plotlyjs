@@ -31,9 +31,9 @@ download2fix <- function(
   # Establish link to playground
   sapply(localFiles, source)
   
-  print(paste0("!!! [1] Resourcing: source('",localFile,"')"))
-  print("!!! [0] Start e.g. with View(figure) to set browser()")
-  print("!!! [1] use uploadFixed() when done...")
+  print(paste0("!!! You are now sourced to files in ",localPlayground))
+  print("!!! Start e.g. with View(figure) to set browser() and debug")
+  print("!!! use uploadFixed() when done...")
 
 }
 
