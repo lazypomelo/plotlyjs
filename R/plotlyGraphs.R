@@ -1317,6 +1317,7 @@ uploadFixed <- function(
     # Push results to github
     path_was <- getwd()
     setwd(repoClone)
+    devtools::document()
     push2github(repoClone)
     setwd(path_was)
     
