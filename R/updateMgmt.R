@@ -110,7 +110,7 @@ uploadFixed <- function(
 #' @param none
 #' @return none
 push2github <- function(repoClone){
-  system('git add -a')
+  system('git add *')
   system('git commit -a -m "Autopush after a fix"')
   system('git push')
   
