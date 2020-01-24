@@ -7,18 +7,20 @@ download2fix <- function(
     repoClone = "C:/jaac/WORK/R utils/plotly/plotlyjs",
     localPlayground = "C:/jaac/WORK/R utils/plotly"){
   
-  repoFile <- paste0(repoClone,"/R/plotlyGraphs.R")
-  localFile <- paste0(localPlayground,"/plotlyGraphs.R")
-  
   # Update local repo
   path_was <- getwd()
   setwd(repoClone)
   system("git pull")
   setwd(path_was)
   
+  # Fetch files locally
+  files2fetch <- list.files(paste0(repoClone,"/R"))
+  repoFiles <- paste0(repoClone,"/R/",files2fetch) #plotlyGraphs.R")
+  localFiles <- paste0(localPlayground,"/", files2fetch) #plotlyGraphs.R")
+  
   # Copy fresh code version into playground
-  file.copy(from = repoFile, 
-            to   = localFile,
+  file.copy(from = repoFiles, 
+            to   = localFiles,
             overwrite = T)
   
   # Break link to library
@@ -27,7 +29,7 @@ download2fix <- function(
   }
   
   # Establish link to playground
-  source(localFile)
+  sapply(localFiles, source)
   
   print(paste0("!!! [1] Resourcing: source('",localFile,"')"))
   print("!!! [0] Start e.g. with View(figure) to set browser()")
@@ -43,30 +45,37 @@ uploadFixed <- function(
     repoClone = "C:/jaac/WORK/R utils/plotly/plotlyjs",
     localPlayground = "C:/jaac/WORK/R utils/plotly"){
   
-  repoFile <- paste0(repoClone,"/R/plotlyGraphs.R")
-  localFile <- paste0(localPlayground,"/plotlyGraphs.R")
+  # Export files back to local repo
+  # -> All .R files get exported, make sure 
+  # -> you do not have temp .R files in export folder!!!
+  files2export <- list.files(paste0(localPlayground))
+  files2export <- files2export[stringr::str_detect(files2export, '\\.R')]
+  repoFiles <- paste0(repoClone,"/R/",files2export) #plotlyGraphs.R")
+  localFiles <- paste0(localPlayground,"/", files2export) #plotlyGraphs.R")
   
   # Dependencies
   resp <- readline("Do you have new library() dependencies? [y/n]")
   if (resp=='n'){
     
-    # ONLY copy fresh code version into playground
-    file.copy(from = localFile, 
-              to   = repoFile,
+    # Copy fresh code version into playground
+    file.copy(from = localFiles, 
+              to   = repoFiles,
               overwrite = T)
     
     print("--> DONE... Now pushing to github")
     
-    # Push results to github
+    # Re-run document()
     path_was <- getwd()
     setwd(repoClone)
     devtools::document()
+    
+    # Push results to github
     push2github(repoClone)
     setwd(path_was)
     
   }else if(resp=='y'){
     
-    resp2 <- readline("Did you mark all dependencies at the beginning of each function definition? [y/n]")
+    resp2 <- readline("Did you mark all dependencies at the beginning of .R files? [y/n]")
     if (resp2=='n'){
       print("...do it and try again.")
       
@@ -78,8 +87,8 @@ uploadFixed <- function(
       if (resp3=='y'){
         
         # Copy fresh code version into playground
-        file.copy(from = localFile, 
-                  to   = repoFile,
+        file.copy(from = localFiles, 
+                  to   = repoFiles,
                   overwrite = T)
         
         # Go to repo folder and update documentation
