@@ -4,8 +4,21 @@
 \alias{graphTypeLine}
 \title{Line graph}
 \usage{
-graphTypeLine(grObj, grInfo, igr, objs, nobjs, x, title, vline, legend,
-  xlabel, ylabel, colors, lineWidth)
+graphTypeLine(
+  grObj,
+  grInfo,
+  igr,
+  objs,
+  nobjs,
+  x,
+  title,
+  vline,
+  legend,
+  xlabel,
+  ylabel,
+  colors,
+  lineWidth
+)
 }
 \value{
 none

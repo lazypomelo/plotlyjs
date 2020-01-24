@@ -4,8 +4,21 @@
 \alias{graphTypeTS}
 \title{Time series graph}
 \usage{
-graphTypeTS(grObj, grInfo, igr, objs, nobjs, x, title, vline, legend,
-  xlabel, ylabel, colors, lineWidth)
+graphTypeTS(
+  grObj,
+  grInfo,
+  igr,
+  objs,
+  nobjs,
+  x,
+  title,
+  vline,
+  legend,
+  xlabel,
+  ylabel,
+  colors,
+  lineWidth
+)
 }
 \value{
 none

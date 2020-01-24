@@ -4,8 +4,12 @@
 \alias{plotlyCompile}
 \title{Compilation of HTML/plotly document}
 \usage{
-plotlyCompile(reportFile = "tmp.html",
-  libFile = "path/to/file/plotly.min.js", lightWeight = F)
+plotlyCompile(
+  reportFile = "tmp.html",
+  libFile = "path/to/file/plotly.min.js",
+  lightWeight = F,
+  reopen = F
+)
 }
 \arguments{
 \item{all}{optional.}

@@ -4,7 +4,7 @@
 \alias{figure}
 \title{Compilation of HTML/plotly document}
 \usage{
-figure(d)
+figure(d, reportFile = "tmp.html", reopen = F)
 }
 \value{
 none, modifies the given HTML template file.

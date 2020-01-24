@@ -4,8 +4,19 @@
 \alias{graphTypeBubble}
 \title{Bubble graph}
 \usage{
-graphTypeBubble(grObj, grInfo, igr, objs, nobjs, title, legend, xlabel,
-  ylabel, colors, by)
+graphTypeBubble(
+  grObj,
+  grInfo,
+  igr,
+  objs,
+  nobjs,
+  title,
+  legend,
+  xlabel,
+  ylabel,
+  colors,
+  by
+)
 }
 \value{
 none

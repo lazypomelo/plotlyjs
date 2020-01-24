@@ -4,7 +4,7 @@
 \alias{openReport}
 \title{Automatic report opening}
 \usage{
-openReport(reportFile)
+openReport(reportFile, reopen)
 }
 \value{
 none

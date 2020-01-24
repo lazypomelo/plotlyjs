@@ -4,8 +4,19 @@
 \alias{graphTypeBar}
 \title{Bar graph}
 \usage{
-graphTypeBar(grObj, grInfo, igr, objs, nobjs, x, title, legend, xlabel,
-  ylabel, colors)
+graphTypeBar(
+  grObj,
+  grInfo,
+  igr,
+  objs,
+  nobjs,
+  x,
+  title,
+  legend,
+  xlabel,
+  ylabel,
+  colors
+)
 }
 \value{
 none

@@ -4,9 +4,19 @@
 \alias{addGraph}
 \title{Generates HTML/plotly code for a new graph}
 \usage{
-addGraph(..., x = c(), type = c(), title = "", vline = c(),
-  legend = c(), xlabel = "", ylabel = "", colors = c(), by = "",
-  lineWidth = 2)
+addGraph(
+  ...,
+  x = c(),
+  type = c(),
+  title = "",
+  vline = c(),
+  legend = c(),
+  xlabel = "",
+  ylabel = "",
+  colors = c(),
+  by = "",
+  lineWidth = 2
+)
 }
 \value{
 none, just pre-allocate in the main workspace
