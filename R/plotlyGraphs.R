@@ -80,7 +80,11 @@ addGraph <- function(..., # Expected input: ts: list(periods,values)
                     #markerSize="", # Slow rendering - only generated if alone data surrounded by NA exist
                     #size=6,     # Bubble size for bubble type
                      by="",     # Grouping data by existing column, used for 'bubble' type
-                     lineWidth=2){
+                     lineWidth=2,
+                    # Dead-end parameters, relevant for compilation
+                    # ...but we need them here if code run from figure()
+                    reportFile="tmp.html",
+                    reopen = F){
 
     # Fetch graph container
     if (!exists('plotly_obj_graphs', envir = .GlobalEnv)) {
@@ -485,21 +489,31 @@ graphTypeLine <- function(grObj,grInfo,igr,
               objs[[ii]][[2]] <- as.numeric(objsInput[[ii]]) # should be already numeric
             }
         }
-    # !!!-> list(y) together with x=... case is highly unlikely,
+    
     # y as numeric would be more natural input, if branch left here for completeness
-    } else if (nobjs==1 & class(objs[[1]])[1]=="list") { # ...[1] for multi classes
+    } else if (nobjs==1 & class(objs[[1]])[1]=="list"){ # ...[1] for multi classes
+        if (length(objs[[1]])==2){
+          # list(x,y) case
+          if (length(x)==0){
+            x <- objs[[1]][[1]] #c(1:length(objs[[1]][[1]]))
+          }
 
-        if (length(x)==0){
-            x <- c(1:length(objs[[1]][[1]]))
+        }else if (length(objs[[1]])==1){
+          # list(y) together with x=... case is highly unlikely, left here for completeness
+          if (length(x)==0){
+              x <- c(1:length(objs[[1]][[1]]))
+          }
+          
+        }else{
+          stop("Unexpected input...")
         }
+      
         objsInput <- objs
         objs[[1]] <- vector("list",2)
         objs[[1]][[1]] <- x
         objs[[1]][[2]] <- as.numeric(objsInput[[1]][[length(objsInput[[1]])]])
 
     } else if (nobjs==1 & class(objs[[1]])[1]!="list") { # Non-list input treatment
-
-
 
         # Input can be numeric, matrix, data frame
         if (is.numeric(objs[[1]])){
@@ -1214,6 +1228,8 @@ openReport <- function(reportFile, reopen){
       # Not everyone uses Rstudio
       if (Sys.getenv("RSTUDIO")=="1"){
         rstudioapi::viewer(reportFile)
+      }else{
+        browseURL(reportFile) 
       }
 
       # Mark the current report file as already opened
@@ -1229,6 +1245,8 @@ openReport <- function(reportFile, reopen){
          # Not everyone uses Rstudio
          if (Sys.getenv("RSTUDIO")=="1"){
             rstudioapi::viewer(reportFile)
+         }else{
+            browseURL(reportFile) 
          }
 
          reports <- c(reports,reportFile)
@@ -1245,12 +1263,43 @@ openReport <- function(reportFile, reopen){
 #' @export
 #' @examples
 #' figure(c(1:5))
-figure <- function(d, reportFile = "tmp.html",
-                      reopen = F) {
-
+figure <- function(..., # Expected input: ts: list(periods,values)
+                        #                 line: list(x,y), or just y
+                        #                 bar:  list()
+                        #                 bubble: list(x,y,[siz])
+                        #                 -> list per each line
+                   x=c(), # Sequence of periods,
+                          # -> if not default
+                          # -> if not specified inside list(periods,values)
+                   type=c(), # Graph type (line/bubble/bar)
+                   title="",
+                   vline=c(), # Vertical bar separators (list of dates)
+                   legend=c(), # List of line labels
+                   xlabel="",
+                   ylabel="",
+                   colors=c(), # Set of line colors in 'rgba(#,#,#,#)' format
+                  #markerSize="", # Slow rendering - only generated if alone data surrounded by NA exist
+                  #size=6,     # Bubble size for bubble type
+                   by="",     # Grouping data by existing column, used for 'bubble' type
+                   lineWidth=2,
+                   reportFile="tmp.html",
+                   libFile="path/to/file/plotly.min.js",
+                   lightWeight = F,
+                   reopen = F){
   plotlyIni()
-  addGraph(d)
-  plotlyCompile(reportFile=reportFile, 
+  addGraph(...,x=x,
+               type=type,
+               title=title,
+               vline=vline,
+               legend=legend,
+               xlabel=xlabel,
+               ylabel=ylabel,
+               colors=colors,
+               by=by,
+               lineWidth=lineWidth)
+  plotlyCompile(reportFile=reportFile,
+                libFile=libFile,
+                lightWeight = lightWeight,
                 reopen=reopen)
 
 }

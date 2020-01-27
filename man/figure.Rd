@@ -4,7 +4,23 @@
 \alias{figure}
 \title{Compilation of HTML/plotly document}
 \usage{
-figure(d, reportFile = "tmp.html", reopen = F)
+figure(
+  ...,
+  x = c(),
+  type = c(),
+  title = "",
+  vline = c(),
+  legend = c(),
+  xlabel = "",
+  ylabel = "",
+  colors = c(),
+  by = "",
+  lineWidth = 2,
+  reportFile = "tmp.html",
+  libFile = "path/to/file/plotly.min.js",
+  lightWeight = F,
+  reopen = F
+)
 }
 \value{
 none, modifies the given HTML template file.
