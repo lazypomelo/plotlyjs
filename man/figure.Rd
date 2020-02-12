@@ -16,10 +16,19 @@ figure(
   colors = c(),
   by = "",
   lineWidth = 2,
+  width = 600,
+  height = 450,
+  layout = "",
+  config = "",
+  style = "",
   reportFile = "tmp.html",
   libFile = "path/to/file/plotly.min.js",
   lightWeight = F,
-  reopen = F
+  name = "Report name",
+  css = "",
+  font = "",
+  reopen = F,
+  debug = F
 )
 }
 \value{

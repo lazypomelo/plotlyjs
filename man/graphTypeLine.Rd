@@ -6,7 +6,7 @@
 \usage{
 graphTypeLine(
   grObj,
-  grInfo,
+  objInfo,
   igr,
   objs,
   nobjs,
@@ -17,7 +17,9 @@ graphTypeLine(
   xlabel,
   ylabel,
   colors,
-  lineWidth
+  lineWidth,
+  width,
+  height
 )
 }
 \value{

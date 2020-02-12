@@ -15,9 +15,13 @@ addGraph(
   ylabel = "",
   colors = c(),
   by = "",
-  lineWidth = 2,
-  reportFile = "tmp.html",
-  reopen = F
+  lineWidth = NA,
+  width = 600,
+  height = 450,
+  style = "",
+  clear = F,
+  layout = "",
+  config = ""
 )
 }
 \value{

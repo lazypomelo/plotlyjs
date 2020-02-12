@@ -6,7 +6,7 @@
 \usage{
 graphTypeBar(
   grObj,
-  grInfo,
+  objInfo,
   igr,
   objs,
   nobjs,
@@ -15,7 +15,9 @@ graphTypeBar(
   legend,
   xlabel,
   ylabel,
-  colors
+  colors,
+  width,
+  height
 )
 }
 \value{

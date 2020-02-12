@@ -6,7 +6,7 @@
 \usage{
 graphTypeBubble(
   grObj,
-  grInfo,
+  objInfo,
   igr,
   objs,
   nobjs,
@@ -15,7 +15,9 @@ graphTypeBubble(
   xlabel,
   ylabel,
   colors,
-  by
+  by,
+  width,
+  height
 )
 }
 \value{

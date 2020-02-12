@@ -8,7 +8,11 @@ plotlyCompile(
   reportFile = "tmp.html",
   libFile = "path/to/file/plotly.min.js",
   lightWeight = F,
-  reopen = F
+  css = "",
+  font = "",
+  name = "Report name",
+  reopen = F,
+  debug = F
 )
 }
 \arguments{
