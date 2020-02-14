@@ -1,13 +1,15 @@
 # plotlyjs for R
-R wrapper for javascript version of [plotly](https://plot.ly/javascript/) graphing library. Suitable for fast generation of reports that contain many graphs (even hundreds). 
+R wrapper for javascript version of [plotly](https://plot.ly/javascript/) graphing library. Suitable for fast generation of reports that contain many graphs (even hundreds), much faster than CRAN plotly library. 
 
-Only basic graph types are handled:
+Basic graph types with simplified input syntax:
 - Time series graphs,
 - Line graphs,
 - Bar graphs,
 - Bubble graphs.
 
-Generated reports are stored in a self-contained HTML file that needs to be opened externally in a browser.
+Custom graphs featuring all plotly features are also covered.
+
+Generated reports are stored in a self-contained HTML file that can be opened in a web browser. Besides plotly graphics, the reports can contain textual input as well (headings, paragraphs, bullet lists, etc.). 
 
 ## Installation
 ``` r
@@ -30,7 +32,7 @@ figure(data, reportFile = "path/to/file.html",
 Each use of *figure()* function always overrides the previous graph. A refresh of the web browser is needed after each update.
  
 ## Intended workflow
-
+Fast visualization via *figure()* helps create simple graphs for quick data checks. When building complex reports, one is expected to utilize sequence of functions *plotlyIni()*, *addText*, *addGraph()* (multiple graphs/paragraphs can be added to the report), *plotlyCompile()*, as described further.
 1) Initialize/Clear previous report contents
 ``` r
 > plotlyIni()
@@ -54,13 +56,15 @@ In most cases here we would like to create many graphs, perhaps inside a *for* l
       )
   }
 ```
+Note that graph titles can be inherited from the input data frame.
+
 Multiple lines in one plot (series by series syntax):
 ``` r
 > dt1 <- data.frame(replicate(5,runif(8)))
 > dt2 <- data.frame(replicate(5,runif(8)))
 > for (ii in 1:ncol(dt1)){
-      addGraph(list(periods,dt1[,ii]),
-      	       list(periods,dt2[,ii]),
+      addGraph(list(periods,dt1[,ii]), # 1st line
+      	       list(periods,dt2[,ii]), # 2nd line in the same plot
 	       title = colnames(dt1)[ii],
 	       legend = c("Model 1", "Model 2"),
 	       type="ts"
@@ -73,41 +77,88 @@ Multiple lines in one plot (all columns from a data frame)
 > dt <- data.frame(replicate(5,runif(8)))
 > addGraph(dt, 
            x = seq(as.Date('2010-01-01'), as.Date('2010-08-01'), by="month") 
-               # or any other sequence of values (even string categories) for other graph types
+               # horizontal axis values,
+               # dates used here, any other sequence of values 
+               # (even string categories) for other graph types possible
   )
 ```
-3) As a last step generate the HTML report:
+3) Textual input
+``` r
+> addText("<h1>Some heading</h2>",
+          "<p> Some paragraph</p>",
+          list("Bullet list - item1","item2","item3")
+  )
+```
+4) As a last step generate the HTML report:
 ``` r
 > plotlyCompile()
 ```
 Leaving the function options blank results in generation of a **tmp.html** file located in the the current working directory (just like the result of **figure()** command).
 
 ## Optional function arguments
-Both graph creation and report compilation functions have optional arguments.
+Graph/paragraph creation and report compilation functions have optional arguments. Default values exist but the user is welcome to override.
 ``` r
 addGraph(data1, data2, data3, ...
-	 type="ts|line|bar|bubble",
-         title="myTitle",
-         legend=c("lg entry 1","lg entry 2",...),
-         vline=c('2010-01-01','2013-01-01',...),
-         xlabel="...",ylabel="...",
-         colors=c(rgba(100,100,100,0.9),...)
+         x = c(1,2,3), # Horizontal axis values, if not entered before as data=list(x, values)
+                       # Can be a vector of numeric values, dates, or textual categories
+	       type = "ts|line|bar|bubble", # also there is 'custom' type, as described below
+         title  = "myTitle",
+         vline  = c('2010-01-01','2013-01-01',...),
+         legend = c("lg entry 1","lg entry 2",...),
+         xlabel = "X axis label",
+         ylabel = "Y axis label",
+         colors = c(rgba(100,100,100,0.9),...)
+        #Bubble graph coloring grouped by a column name values
+         by = "column name", # works with input data in data frame format
+        #For line graphs/time series graphs only
+         lineWidth = 2,
+        #Dimensions of generated graph in pixels
+         width = 600,
+         height = 450,
+        #CSS style of the <div> graph envelope
+         style = "margin-left: 100px",
+         clear = F
 )
-  ```
+```
 **Notes:**
 - *vline* - Set of vertical lines (useful for time series graphs to separate history from the forecasting range)  
 - *colors* - set of RGB/RGBA color codes for each of the input data series
+- *clear* - By default the graphs are placed next to each other till the screen space is used up. Forcing ``` r clear = T ``` puts the currently generated graph below previously generated content, all the way to the left.
 
 ``` r
-> plotlyCompile(reportFile="path/to/your/file.html",
-		libFile="path/to/file/plotly.min.js",
-                lightWeight=F)
+addText("<h1>Heading</h1>",
+        "<p>Some paragraph</p>",
+        list("bullet list - item1","item2","item3",...),
+       #CSS styling applied to this paragraph
+        "<p style='text-align: right;'>Some paragraph</p>",
+       #CSS styling applied to 1st and 3rd bullet
+        list("item1","item2","item3", style=c("line-height: 20px;","","line-height: 20px;")),
+        ..., # other input objects
+        style = "CSS style on <div> level",
+        clear = T,
+)
+```
+**Notes:**
+- *clear* - By default, all text paragraphs are placed below the previously generated content, expanding from the left. Setting ``` r clear = F ``` makes the text paragraphs appear to the right of previously generated object (if  the space permits).
+
+``` r
+plotlyCompile(reportFile = "path/to/your/file.html",
+              libFile = "path/to/file/plotly.min.js",
+              lightWeight = F,
+              css = "styling on the level of entire document"), # e.g. div{padding: 0px;}
+              font = 1, # Predefined google fonts: =1 sans-serif, =2 serif
+)
 ```
  **Notes:**
 - All arguments are optional
-- *lightWeight*=T ...plotly library downloaded from CDN (slower to re-run results but easy to share the report file since it is small in size)
+- *lightWeight*=T ...plotly library linked via a web URL to CDN repository (slower to re-run results but easy to share the report file since it is small in size)
 - *lightWeight*=F ...local copy of Plotly library embedded into the report (faster to generate/re-load in a browser, but the report is quite large in size)
-- *libFile* ...path to local copy of plotly JS library file 
+- *libFile* ...[to be used together with *lightWeight*=F] optional path to the local copy of plotly JS library file (if omitted, a fresh download of plotly library is performed)
+- *font* - besides the default font types, the user can utilize e.g. google open fonts using the following syntax:
+``` r
+  font = list("<link href='https://fonts.googleapis.com/css?family=Roboto&display=swap' rel='stylesheet'>",
+              "font-family: 'Roboto', sans-serif;")
+```
 
 ## Other graph types
 Here we describe the syntax for graph types other than time series. *addGraph()* function can still be used together with *type* option.
@@ -146,5 +197,47 @@ data <- data.frame(
 addGraph(data,
 	 type="bubble",
 	 by="group"
+)
+```
+### Custom graphs
+In case the above graph types with simplified R syntax are not serving well, it is possible to generate any kind of graph while respecting the plotly syntax directly and setting *type* to 'custom'.
+
+> *Example*:
+> We want to plot two series into a single graph, one as regular line graph, one with markers only.
+> This would be the plotly syntax (inspired by [plotly](https://plot.ly/javascript/))
+``` js
+var trace1 = {
+  x: [1, 2, 3, 4],
+  y: [10, 15, 13, 17],
+  mode: 'markers'
+};
+
+var trace2 = {
+  x: [2, 3, 4, 5],
+  y: [16, 5, 11, 9],
+  mode: 'lines'
+};
+
+var data = [trace1, trace2];
+
+var layout = {
+  title:'Line and Scatter Plot'
+};
+var config = {
+  displayModeBar: false
+};
+Plotly.newPlot('myDiv', data, layout, config);
+```
+> which can be ported to R in the following way:
+``` r
+addGraph(list(x = c(1,2,3,4),
+              y = c(10,15,13,17),
+              mode = 'markers'),
+         list(x = c(2,3,4,5),
+              y = c(16,5,11,9),
+              mode = 'markers'),
+         layout = list(title = "Line and Scatter Plot"),
+         config = list(displayModeBar = F)
+        #All other parameters as documented above work for custom graphs as well
 )
 ```
