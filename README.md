@@ -32,7 +32,7 @@ figure(data, reportFile = "path/to/file.html",
 Each use of *figure()* function always overrides the previous graph. A refresh of the web browser is needed after each update.
  
 ## Intended workflow
-Fast visualization via *figure()* helps create simple graphs for quick data checks. When building complex reports, one is expected to utilize sequence of functions *plotlyIni()*, *addText*, *addGraph()* (multiple graphs/paragraphs can be added to the report), *plotlyCompile()*, as described further.
+Fast visualization via *figure()* helps create simple graphs for quick data checks. When building complex reports, one is expected to utilize sequence of functions *plotlyIni()*, *addText()*, *addGraph()* (multiple graphs/paragraphs can be added to the report), *plotlyCompile()*, as described below.
 1) Initialize/Clear previous report contents
 ``` r
 > plotlyIni()
@@ -96,12 +96,12 @@ Multiple lines in one plot (all columns from a data frame)
 Leaving the function options blank results in generation of a **tmp.html** file located in the the current working directory (just like the result of **figure()** command).
 
 ## Optional function arguments
-Graph/paragraph creation and report compilation functions have optional arguments. Default values exist but the user is welcome to override.
+Graph/paragraph creation and report compilation functions have optional arguments. Default values exist but the user is welcome to override them.
 ``` r
 addGraph(data1, data2, data3, ...
          x = c(1,2,3), # Horizontal axis values, if not entered before as data=list(x, values)
                        # Can be a vector of numeric values, dates, or textual categories
-	       type = "ts|line|bar|bubble", # also there is 'custom' type, as described below
+	       type = "ts|line|bar|bubble", # also there is flexible 'custom' type, as described below
          title  = "myTitle",
          vline  = c('2010-01-01','2013-01-01',...),
          legend = c("lg entry 1","lg entry 2",...),
@@ -123,7 +123,7 @@ addGraph(data1, data2, data3, ...
 **Notes:**
 - *vline* - Set of vertical lines (useful for time series graphs to separate history from the forecasting range)  
 - *colors* - set of RGB/RGBA color codes for each of the input data series
-- *clear* - By default the graphs are placed next to each other till the screen space is used up. Forcing ``` r clear = T ``` puts the currently generated graph below previously generated content, all the way to the left.
+- *clear* - By default the graphs are placed next to each other till the screen space is used up. Forcing ```clear = T ``` puts the currently generated graph below previously generated content, all the way to the left.
 
 ``` r
 addText("<h1>Heading</h1>",
@@ -139,7 +139,7 @@ addText("<h1>Heading</h1>",
 )
 ```
 **Notes:**
-- *clear* - By default, all text paragraphs are placed below the previously generated content, expanding from the left. Setting ``` r clear = F ``` makes the text paragraphs appear to the right of previously generated object (if  the space permits).
+- *clear* - By default, all text paragraphs are placed below the previously generated content, expanding from the left. Setting ```clear = F ``` makes the text paragraphs appear to the right of previously generated object (if  the space permits).
 
 ``` r
 plotlyCompile(reportFile = "path/to/your/file.html",
@@ -147,6 +147,9 @@ plotlyCompile(reportFile = "path/to/your/file.html",
               lightWeight = F,
               css = "styling on the level of entire document"), # e.g. div{padding: 0px;}
               font = 1, # Predefined google fonts: =1 sans-serif, =2 serif
+              name = "My report name", # to be displayed at the top of report
+              reopen = F,
+              debug = F
 )
 ```
  **Notes:**
@@ -159,9 +162,11 @@ plotlyCompile(reportFile = "path/to/your/file.html",
   font = list("<link href='https://fonts.googleapis.com/css?family=Roboto&display=swap' rel='stylesheet'>",
               "font-family: 'Roboto', sans-serif;")
 ```
+- *reopen* - The generated report opens up in the web browser automatically. In case the report is then closed by the user we can force to reopen it again by this parameter.
+- *debug* - CSS styling can be a struggle, debug mode draws red frames around the generated objects to allow for easier positioning.
 
 ## Other graph types
-Here we describe the syntax for graph types other than time series. *addGraph()* function can still be used together with *type* option.
+Here we describe the syntax for graph types other than time series. *addGraph()* function can still be used together with proper *type* specification.
 
 ### Line graph
 The syntax for line graphs is identical as for the time series graphs. 
@@ -170,7 +175,7 @@ Values on horizontal axis are optional. The type option should be set to "line"
 data <- matrix(runif(15),5,3))
 addGraph(data,        # 1 or more list(x,y), or a numeric vector/matrix, or a data frame
          type="line",
-	 x = c(1:5)   # x axis values; exclude this line for default values
+	       x = c(1:5)   # optional x axis values
 )
 ```
 ### Bar graph
@@ -204,7 +209,7 @@ In case the above graph types with simplified R syntax are not serving well, it 
 
 > *Example*:
 > We want to plot two series into a single graph, one as regular line graph, one with markers only.
-> This would be the plotly syntax (inspired by [plotly](https://plot.ly/javascript/))
+> This would be the plotly syntax (inspired by [plotly](https://plot.ly/javascript/)):
 ``` js
 var trace1 = {
   x: [1, 2, 3, 4],
@@ -228,7 +233,7 @@ var config = {
 };
 Plotly.newPlot('myDiv', data, layout, config);
 ```
-> which can be ported to R in the following way:
+> ...which can be ported to R in the following way:
 ``` r
 addGraph(list(x = c(1,2,3,4),
               y = c(10,15,13,17),
