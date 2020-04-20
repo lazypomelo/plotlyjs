@@ -24,7 +24,7 @@ figure(
   reportFile = "tmp.html",
   libFile = "path/to/file/plotly.min.js",
   lightWeight = F,
-  name = "Report name",
+  name = "",
   css = "",
   font = "",
   reopen = F,

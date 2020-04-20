@@ -32,6 +32,8 @@ download2fix <- function(
   sapply(localFiles, source)
   
   print(paste0("!!! You are now sourced to files in ",localPlayground))
+  print("!!! Before playing change the working directory where tmp.html")
+  print("    can be sitting together with generated 'js' folder")
   print("!!! Start e.g. with View(figure) to set browser() and debug")
   print("!!! use uploadFixed() when done...")
 

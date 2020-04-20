@@ -1536,7 +1536,7 @@ plotlyCompile <- function(reportFile="tmp.html",
                           lightWeight = F,
                           css = "",
                           font = "",
-                          name = "Report name",
+                          name = "", #"To edit: Some report name",
                           reopen = F,
                           debug = F){
 
@@ -1624,13 +1624,27 @@ plotlyCompile <- function(reportFile="tmp.html",
         download.file("https://cdn.plot.ly/plotly-latest.min.js",
                paste0(report_folder,"/js/plotly-latest.min.js"))
       }
+        
+      # Pick the JS library file from the folder contents
+      contents <- list.files(paste0(report_folder,"/js"))
+      JScontents <- stringr::str_match(contents,'plotly.*?\\.js')
+      pickedFile <- JScontents[!is.na(JScontents)][1]
+      libLink <- paste0("<script src=\"js/",pickedFile,"\"></script>")
+        
+    }else{
+      
+      # Check if any plotly lib inside the existing js folder
+      contents <- list.files(paste0(report_folder,"/js"))
+      JScontents <- stringr::str_match(contents,'plotly.*?\\.js')
+      if ( all(is.na(JScontents)) ){
+          download.file("https://cdn.plot.ly/plotly-latest.min.js",
+               paste0(report_folder,"/js/plotly-latest.min.js"))
+          libLink <- paste0("<script src=\"js/plotly-latest.min.js\"></script>")
+      }else{
+          pickedFile <- JScontents[!is.na(JScontents)][1]
+          libLink <- paste0("<script src=\"js/",pickedFile,"\"></script>")
+      }
     }
-
-    # Pick the JS library file from the folder contents
-    contents <- list.files(paste0(report_folder,"/js"))
-    JScontents <- stringr::str_match(contents,'plotly.*?\\.js')
-    pickedFile <- JScontents[!is.na(JScontents)][1]
-    libLink <- paste0("<script src=\"js/",pickedFile,"\"></script>")
 
   }else{ # light-weight version (single HTML output file)
     libLink <- "<script src=\"https://cdn.plot.ly/plotly-latest.min.js\"></script>"
@@ -1735,7 +1749,23 @@ plotlyCompile <- function(reportFile="tmp.html",
   # User-defined CSS can overwrite default setup
   CSS <- c(CSS,paste0("\t\t",css))
   
-  # Background SVG
+  # Background image
+  if (name!=""){
+    headerPart <- c("<!-- Header -->",
+                  "<div id='header' style=\"margin-left: 5px;",
+                  paste0("\t\t\tbackground-repeat: no-repeat; background-size: 100% 100%;\">"),
+                  paste0("\t<h1 style=\"margin-top: 5px; margin-bottom: 5px\">", name, "</h1>"),
+                  paste0("\t<p style=\"font-size: 10px; margin-top: 5px;\">Report creation timestamp: ",Sys.time(),"</p>"),
+                  "</div>\n")
+    backgroundPic <- paste0("\ndocument.getElementById('header').style.backgroundImage = \"url('", encodedBackground(), "')\";")      
+  }else{
+    # Do not show the background image, just the creation time stamp
+    headerPart <- c("<!-- Header -->",
+                  "<div id='header' style=\"margin-left: 5px;\">",
+                  paste0("\t<p style=\"font-size: 10px; margin-top: 5px;\">Report creation timestamp: ",Sys.time(),"</p>"),
+                  "</div>\n") 
+    backgroundPic <- "\n"      
+  }
   
   # Rewrite the report file from scratch
   fileConn<-file(reportFile)
@@ -1763,12 +1793,13 @@ plotlyCompile <- function(reportFile="tmp.html",
                "<div id=\"loader-msg\">Loading...</div>",
                "<div id=\"loader-back\"></div>\n",
 			   "<div id=\"content\" style=\"display: none;\">", # Needed for loader (hides everything initially)
-               "<!-- Header -->",
-               "<div id='header' style=\"margin-left: 5px;",
-			   paste0("\t\t\tbackground-repeat: no-repeat; background-size: 100% 100%;\">"),
-			   paste0("\t<h1 style=\"margin-top: 5px; margin-bottom: 5px\">", name, "</h1>"),
-			   paste0("\t<p style=\"font-size: 10px; margin-top: 5px;\">Report creation timestamp: ",Sys.time(),"</p>"),
-               "</div>\n",
+#                "<!-- Header -->",
+#                "<div id='header' style=\"margin-left: 5px;",
+# 			   paste0("\t\t\tbackground-repeat: no-repeat; background-size: 100% 100%;\">"),
+# 			   paste0("\t<h1 style=\"margin-top: 5px; margin-bottom: 5px\">", name, "</h1>"),
+# 			   paste0("\t<p style=\"font-size: 10px; margin-top: 5px;\">Report creation timestamp: ",Sys.time(),"</p>"),
+#                "</div>\n",
+			   headerPart,
                "<!-- Page content -->",
 			   allDivs, 
 			   "\n</div> <!-- 'content' closing -->",
@@ -1776,7 +1807,8 @@ plotlyCompile <- function(reportFile="tmp.html",
               #paste0("\t<script src=\"",JSfileInject,"\"></script>"),
                "<script>",
                unlist(grObj),
-			   paste0("\ndocument.getElementById('header').style.backgroundImage = \"url('",encodedBackground(),"')\";"),
+			  #paste0("\ndocument.getElementById('header').style.backgroundImage = \"url('", backgroundPic, "')\";"),
+               backgroundPic,
                "</script>",
                "</html>"), fileConn)
   close(fileConn)
@@ -1875,7 +1907,7 @@ figure <- function(..., # Expected input: ts: list(periods,values)
                    reportFile="tmp.html",
                    libFile="path/to/file/plotly.min.js",
                    lightWeight = F,
-                   name = "Report name",
+                   name = "",
                    css = "",
                    font="",
                    reopen = F,

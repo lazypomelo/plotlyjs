@@ -10,7 +10,7 @@ plotlyCompile(
   lightWeight = F,
   css = "",
   font = "",
-  name = "Report name",
+  name = "",
   reopen = F,
   debug = F
 )
