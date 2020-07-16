@@ -256,7 +256,7 @@ dt[[2]] <- list(x = c(2,3,4,5),
                 y = c(16,5,11,9),
                 mode = 'lines+markers')
 addGraph(dt,
-				 layout = ...,
-				 config = ...
+         layout = ...,
+         config = ...
 )
 ```
