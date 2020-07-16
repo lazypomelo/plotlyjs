@@ -20,8 +20,8 @@ addGraph(
   height = 450,
   style = "",
   clear = F,
-  layout = "",
-  config = ""
+  layout = list(),
+  config = list()
 )
 }
 \value{

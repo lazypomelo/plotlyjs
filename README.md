@@ -219,7 +219,7 @@ var trace1 = {
 
 var trace2 = {
   x: [2, 3, 4, 5],
-  y: [16, 5, 11, 9],
+  y: [16, 5, NaN, 9],
   mode: 'lines'
 };
 
@@ -233,16 +233,30 @@ var config = {
 };
 Plotly.newPlot('myDiv', data, layout, config);
 ```
-> ...which can be ported to R in the following way:
+> ...which can be mimiced by the following way R syntax:
 ``` r
-addGraph(list(x = c(1,2,3,4),
-              y = c(10,15,13,17),
+addGraph(list(x = c(1, 2, 3, 4),
+              y = c(10, 15, 13, 17),
               mode = 'markers'),
-         list(x = c(2,3,4,5),
-              y = c(16,5,11,9),
-              mode = 'markers'),
+         list(x = c(2, 3, 4, 5),
+              y = c(16, 5, NA, 9),
+              mode = 'lines'),
          layout = list(title = "Line and Scatter Plot"),
          config = list(displayModeBar = F)
         #All other parameters as documented above work for custom graphs as well
+)
+```
+Custom type graphs also allow for a flexible number of input objects, organized as nested lists:
+``` r
+dt <- list()
+dt[[1]] <- list(x = c(1,2,3,4),
+                y = c(10,15,13,17),
+                mode = 'markers')
+dt[[2]] <- list(x = c(2,3,4,5),
+                y = c(16,5,11,9),
+                mode = 'lines+markers')
+addGraph(dt,
+				 layout = ...,
+				 config = ...
 )
 ```

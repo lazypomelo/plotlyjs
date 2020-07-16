@@ -240,8 +240,8 @@ addGraph <- function(..., # Expected input: ts: list(periods,values)
                      clear = F,
                     ######################
                     #Custom graphs options
-                     layout = "",
-                     config = ""
+                     layout = list(),
+                     config = list()
                      ){
  
     # Fetch graph container
@@ -265,12 +265,28 @@ addGraph <- function(..., # Expected input: ts: list(periods,values)
     # Input objects
     objs <- list(...)
     nobjs <- length(objs)
-
+    
+    # Check for list of multiple objects on input
+    if (nobjs==1 & is.list(objs[[1]])){
+        if (!is.null(names(objs[[1]][[1]]))){
+            nobjs <- length(objs[[1]])
+            objs <- objs[[1]]
+            type = "custom"
+        }
+    }
+    
     # Optional styling on graph <div> level
     if (clear==T){
-        style <- paste0(style,"clear: both; ")
+        style <- paste0(style,"; clear: both; ")
     }
     if (style!=""){
+        
+        # Check if graph width is entered as style="width: x%"
+        styleFreeOfSpaces <- stringr::str_replace_all(style," +","")
+        if (stringr::str_detect(styleFreeOfSpaces,"width:\\d+\\%")){
+            width <- 0 # width obj. not needed any more
+        }
+        
         grObjSty  <- get('plotly_obj_graphs_sty', envir=.GlobalEnv)    
         grObjSty[["grID"]] <- c(grObjSty[["grID"]], igr)
         grObjSty[["style"]] <- c(grObjSty[["style"]], style)
@@ -279,7 +295,7 @@ addGraph <- function(..., # Expected input: ts: list(periods,values)
     
     # Guess graph type if not user-supplied
     if (length(type)==0){
-        if (layout!="" | config!=""){
+        if (length(layout)>0 | length(config)>0){ 
             type = "custom"
         }else{
             guineapig <- objs[[1]]
@@ -1290,12 +1306,11 @@ graphCustom <- function(grObj,objInfo,igr,
         }            
     }
     # Layout param
-    if (is.character(layout)){
-        if (layout==""){
-            layout <- list()
-        }
-    }else if (!is.list(layout)){
+    if (!is.list(layout)){
         stop("Plotly layout param must be a list...")
+    }
+    if (!('hovermode' %in% names(layout))){
+        layout$hovermode <- "closest"
     }
     if (title!=""){
         layout$title <- title
@@ -1309,19 +1324,22 @@ graphCustom <- function(grObj,objInfo,igr,
     if (!is.numeric(width) | !is.numeric(height)){
         stop("Plotly graph dimensions - numeric input needed...")   
     }
-    layout$autosize <- F
-    layout$width <- width
+    layout$autosize <- T # Used to be F, but width: 100% did not work
+    if (width>0){ # Can be overruled by style="width: 100%", 
+                  # in that case 'width' parameter is set to 0
+        layout$width <- width
+    }
     layout$height <- height
     
     # Config param
-    if (config==""){
+    if (length(config)==0){
         config <- list(displayModeBar = F)
     }else{
         if (is.list(config)){
             if ( !('displayModeBar' %in% names(config)) ){
                 config$displayModeBar <- F
             }
-            config <- processOpts(config, 2)  
+            #config <- processOpts(config, 2)  
         }else{
             stop("Plotly config param needs to be in list(field: val, ...) format")
         }
@@ -1419,7 +1437,15 @@ graphCustom <- function(grObj,objInfo,igr,
 #' @param none
 #' @return JSON structure
 processOpts <- function(input, level){
-    # browser()
+    
+    # list() case <empty>, e.g. for rangeslider: {} (no params needed inside)
+    if (length(input)==0){
+        # !!! last time we had rangeslider: [{}], including [], perhaps ok
+        segmGlue <- ""
+        return(segmGlue)    
+    }
+    
+    # Main part
     buffer_ <- 10
     segmGlue <- vector("character", buffer_)
     start_ <- 1
@@ -1779,7 +1805,7 @@ plotlyCompile <- function(reportFile="tmp.html",
 			   "\t\t\t\t\tdocument.getElementById(\"loader\").style.display='none';",
 			   "\t\t\t\t\tdocument.getElementById(\"loader-msg\").style.display='none';",
 			   "\t\t\t\t\tdocument.getElementById(\"loader-back\").style.display='none';",
-			   "\t\t\t\t\tdocument.getElementById(\"content\").style.display='block';",
+			   "\t\t\t\t\t//document.getElementById(\"content\").style.display='block';// not needed unless display 'none' initially",
 		       "\t\t\t\t}, false);",
 	           "\t\t</script>",
 			   "\t\t<!-- Font -->",
@@ -1792,7 +1818,11 @@ plotlyCompile <- function(reportFile="tmp.html",
 			   "<div id=\"loader\"></div>",
                "<div id=\"loader-msg\">Loading...</div>",
                "<div id=\"loader-back\"></div>\n",
-			   "<div id=\"content\" style=\"display: none;\">", # Needed for loader (hides everything initially)
+			   # Main content
+			   # 'none' needed for loader (hides everything initially)
+			   # but it does not render width: 100% well
+			   # display: block preferred even though plain HTML parts are visible while loading
+			   "<div id=\"content\" style=\"display: block;\">", 
 #                "<!-- Header -->",
 #                "<div id='header' style=\"margin-left: 5px;",
 # 			   paste0("\t\t\tbackground-repeat: no-repeat; background-size: 100% 100%;\">"),
@@ -1899,8 +1929,8 @@ figure <- function(..., # Expected input: ts: list(periods,values)
                    height = 450,
                   ######################
                   #Custom graphs options
-                   layout = "",
-                   config = "",
+                   layout = list(),
+                   config = list(),
                    style = "",
                   ####################
                   #Compilation options
