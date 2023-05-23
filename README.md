@@ -244,6 +244,7 @@ addGraph(list(x = c(1, 2, 3, 4),
          layout = list(title = "Line and Scatter Plot"),
          config = list(displayModeBar = F)
         #All other parameters as documented above work for custom graphs as well
+	# -> if 'title = ...' used, it will override the title specified inside 'layout = ...'
 )
 ```
 Custom type graphs also allow for a flexible number of input objects, organized as nested lists:
